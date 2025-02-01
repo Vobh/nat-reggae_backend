@@ -1,0 +1,6 @@
+asgiref==3.8.1
+Django==5.0.2
+sqlparse==0.5.3
+psycopg2-binary==2.9.9
+
+"We are in 3:48:59 segundos"
