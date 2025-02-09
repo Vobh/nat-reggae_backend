@@ -1,8 +1,9 @@
 from django.http import JsonResponse
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from .models import Product, Reservation
-from .serializers import ProductsListSerializer, ProductsDetailSerializer
+
 from .forms import ProductForm
+from .models import Product, Reservation
+from .serializers import ProductsListSerializer, ProductsDetailSerializer, ReservationsListSerializer
 
 @api_view(['GET'])
 @authentication_classes([])
@@ -25,7 +26,19 @@ def products_detail(request, pk):
 
     return JsonResponse(serializer.data)
 
-@api_view(['POST', 'FILES'])
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
+def product_reservations(request, pk):
+    product = Product.objects.get(pk=pk)
+    reservations = product.reservations.all()
+
+    serializer = ReservationsListSerializer(reservations, many=True)
+
+    return JsonResponse(serializer.data, safe=False)
+
+@api_view(['POST', 'FILES']) # 8:23:06
 def create_product(request):
     form = ProductForm(request.POST, request.FILES)
 
