@@ -29,7 +29,7 @@ class ProductsDetailSerializer(serializers.ModelSerializer):
         )
 
 class ReservationsListSerializer(serializers.ModelSerializer):
-    roduct = ProductsListSerializer(read_only=True, many=False)
+    product = ProductsListSerializer(read_only=True, many=False)
     class Meta:
         model = Reservation
         fields = (

@@ -10,6 +10,17 @@ from .serializers import ProductsListSerializer, ProductsDetailSerializer, Reser
 @permission_classes([])
 def products_list(request):
     products = Product.objects.all()
+
+    #
+    # Filter
+
+    vendor_id = request.GET.get('vendor_id', '')
+
+    if vendor_id:
+        products = products.filter(vendor_id=vendor_id)
+    
+    #
+    # 
     serializer = ProductsListSerializer(products, many=True)
 
     return JsonResponse ({
@@ -38,7 +49,7 @@ def product_reservations(request, pk):
 
     return JsonResponse(serializer.data, safe=False)
 
-@api_view(['POST', 'FILES']) # 8:23:06
+@api_view(['POST', 'FILES'])
 def create_product(request):
     form = ProductForm(request.POST, request.FILES)
 
