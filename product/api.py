@@ -1,14 +1,31 @@
 from django.http import JsonResponse
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework_simplejwt.tokens import AccessToken
 
 from .forms import ProductForm
 from .models import Product, Reservation
 from .serializers import ProductsListSerializer, ProductsDetailSerializer, ReservationsListSerializer
+from useraccount.models import User
 
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([])
 def products_list(request):
+    #
+    # Auth
+
+    try:
+        token = request.META['HTTP_AUTHORIZATION'].split('Bearer ')[1]
+        token = AccessToken(token)
+        user_id = token.payload['user_id']
+        user = User.objects.get(pk=user_id)
+    except Exception as e:
+        user = None
+
+    #
+    #
+
+    favorites = []
     products = Product.objects.all()
 
     #
@@ -20,11 +37,20 @@ def products_list(request):
         products = products.filter(vendor_id=vendor_id)
     
     #
+    # Favorites
+
+    if user:
+        for product in products:
+            if user in product.favorited.all():
+                favorites.append(product.id)
+    
+    #
     # 
     serializer = ProductsListSerializer(products, many=True)
 
     return JsonResponse ({
-        'data': serializer.data
+        'data': serializer.data,
+        'favorites': favorites
     })
 
 @api_view(['GET'])
