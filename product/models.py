@@ -14,7 +14,7 @@ class Product(models.Model):
     country = models.CharField(max_length=100)
     country_code = models.CharField(max_length=10)
     category = models.CharField(max_length=100)
-    #favorited
+    favorited = models.ManyToManyField(User, related_name='favorites', blank=True)
     image = models.ImageField(upload_to='uploads/products')
     vendor = models.ForeignKey(User, related_name='products', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

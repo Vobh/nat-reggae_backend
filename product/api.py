@@ -89,3 +89,16 @@ def book_product(request, pk):
         print('Error', e)
 
         return JsonResponse({'success': False})
+
+@api_view(['POST'])
+def toggle_favorite(request, pk):
+    product = Product.objects.get(pk=pk)
+
+    if request.user in product.favorited.all():
+        product.favorited.remove(request.user)
+
+        return JsonResponse({'is_favorite': False})
+    else:
+        product.favorited.add(request.user)
+
+        return JsonResponse({'is_favorite': True})
