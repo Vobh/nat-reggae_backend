@@ -31,10 +31,14 @@ def products_list(request):
     #
     # Filter
 
+    is_favorites = request.GET.get('is_favorites', '')
     vendor_id = request.GET.get('vendor_id', '')
 
     if vendor_id:
         products = products.filter(vendor_id=vendor_id)
+    
+    if is_favorites:
+        products = products.filter(favorited__in=[user])
     
     #
     # Favorites
