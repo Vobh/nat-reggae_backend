@@ -4,7 +4,7 @@ from channels.middleware import BaseMiddleware
 
 from rest_framework_simplejwt.tokens import AccessToken
 
-from useraccount.models import User # 9:57:23
+from useraccount.models import User
 
 @database_sync_to_async
 def get_user(token_key):
