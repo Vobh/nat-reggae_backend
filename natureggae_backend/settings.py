@@ -23,6 +23,12 @@ SITE_ID = 1
 
 WEBSITE_URL = 'http://localhost:8000'
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer'
+    }
+}
+
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
@@ -65,6 +71,7 @@ REST_AUTH = {
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -119,6 +126,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'natureggae_backend.wsgi.application'
+ASGI_APPLICATION = 'natureggae_backend.asgi.application'
 
 
 # Database
