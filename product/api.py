@@ -34,11 +34,36 @@ def products_list(request):
     is_favorites = request.GET.get('is_favorites', '')
     vendor_id = request.GET.get('vendor_id', '')
 
+    country = request.GET.get('country', '')
+    category = request.GET.get('category', '')
+    checkin_date = request.GET.get('checkIn', '')
+    checkout_date = request.GET.get('checkOut', '')
+    days = request.GET.get('numDays', '')
+
+    if checkin_date and checkout_date:
+        exact_matches = Reservation.objects.filter(start_date=checkin_date) | Reservation.objects.filter(end_date=checkout_date)
+        overlap_matches = Reservation.objects.filter(start_date__lte=checkout_date, end_date__gte=checkin_date)
+        all_matches = []
+
+        for reservation in exact_matches | overlap_matches:
+            all_matches.append(reservation.product_id)
+
+            products = products.exclude(id__in=all_matches)
+
     if vendor_id:
         products = products.filter(vendor_id=vendor_id)
     
     if is_favorites:
         products = products.filter(favorited__in=[user])
+    
+    if days:
+        products = products.filter(days__gte=days)
+
+    if country:
+        products = products.filter(country=country)
+
+    if category and category != 'undefined':
+        products = products.filter(category=category)
     
     #
     # Favorites
