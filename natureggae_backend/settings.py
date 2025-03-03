@@ -90,7 +90,7 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
 
     'corsheaders',
-
+    'shop',
     'useraccount',
     'product',
     'chat',
